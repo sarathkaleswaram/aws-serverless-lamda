@@ -1,0 +1,50 @@
+service: user-management-api
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: us-east-1
+  stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  add:
+    handler: handler.add
+    events:
+     - http:
+        path: users/Add
+        method: post
+  update:
+    handler: handler.update
+    events:
+     - http:
+        path: users/Update/{id}
+        method: put
+  delete:
+    handler: handler.delete
+    events:
+     - http:
+        path: users/Delete/{id}
+        method: delete
+  list:
+    handler: handler.list
+    events:
+     - http:
+        path: users/List
+        method: get
+  get:
+    handler: handler.get
+    events:
+     - http:
+        path: users/Get/{id}
+        method: get
